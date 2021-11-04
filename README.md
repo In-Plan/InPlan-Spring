@@ -23,6 +23,8 @@
 
 ### Futures
 
+> 일정과 사용자를 관리한다.
+
 1. 일정 : 활동한 내용을 등록, 조회, 수정, 삭제를 한다.
 
    - 사용자
@@ -40,6 +42,56 @@
 3. 카테고리 : 일정의 카테고리를 등록, 조회, 수정, 삭제를 한다.
 
    - 카테고리명
+
+
+
+
+
+### Database
+
+> 기능구현을 위해 데이터베이스를 설계한다.
+
+
+
+![이미지](./doc/1.png)
+
+
+
+#### user
+
+| PK    | column | Type |
+| ----- | ------ | ---- |
+| :key: | id     | INT  |
+|       | name   | TEXT |
+|       | email  | TEXT |
+
+
+
+#### plan
+
+| PK    | column      | Type |
+| ----- | ----------- | ---- |
+| :key: | id          | INT  |
+|       | user_id     | INT  |
+|       | start_date  | DATE |
+|       | end_date    | DATE |
+|       | category_id | INT  |
+|       | description | TEXT |
+
+
+
+#### category
+
+| PK    | column | Type |
+| ----- | ------ | ---- |
+| :key: | id     | INT  |
+|       | name   | TEXT |
+
+
+
+
+
+
 
 
 
