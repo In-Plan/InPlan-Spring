@@ -65,18 +65,12 @@
 |       | category_id | INT  |
 |       | description | TEXT |
 
-#### category
+#### plan_category
 
 | PK    | column | Type |
 | ----- | ------ | ---- |
 | :key: | id     | INT  |
 |       | name   | TEXT |
-
-
-
-
-
-
 
 
 
