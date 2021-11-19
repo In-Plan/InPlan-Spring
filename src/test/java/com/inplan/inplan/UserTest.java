@@ -14,17 +14,13 @@ public class UserTest {
 
     @Test
     void createUser() {
-        User user = new User();
-        user.email = "test@test.com";
-        user.name = "test";
+        User user = new User(0,"test@test.com", "test");
         userRepository.save(user);
     }
 
     @Test
     void selectUser() {
-        User user = new User();
-        user.email = "test@test.com";
-        user.name = "test";
+        User user = new User(0,"test@test.com", "test");
         userRepository.save(user);
 
         Optional<User> selectedUser = userRepository.findById(1);
@@ -35,9 +31,7 @@ public class UserTest {
 
     @Test
     void updateUser() {
-        User user = new User();
-        user.email = "test@test.com";
-        user.name = "test";
+        User user = new User(0,"test@test.com", "test");
         userRepository.save(user);
 
         Optional<User> selectedUser = userRepository.findById(1);
@@ -45,7 +39,7 @@ public class UserTest {
             System.out.println("user.get() = " + selectedUser.get());
         }
 
-        user.name = "test_updated";
+        user.setName("test_updated");
         userRepository.save(user);
 
         Optional<User> updatedUser = userRepository.findById(1);
@@ -56,9 +50,7 @@ public class UserTest {
 
     @Test
     void deleteUser() {
-        User user = new User();
-        user.email = "test@test.com";
-        user.name = "test";
+        User user = new User(0,"test@test.com", "test");
         userRepository.save(user);
 
         userRepository.deleteById(1);
