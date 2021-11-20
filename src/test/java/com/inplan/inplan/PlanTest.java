@@ -1,5 +1,9 @@
 package com.inplan.inplan;
 
+import com.inplan.inplan.dao.Plan;
+import com.inplan.inplan.dao.User;
+import com.inplan.inplan.repository.PlanRepository;
+import com.inplan.inplan.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

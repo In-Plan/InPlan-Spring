@@ -1,9 +1,13 @@
 package com.inplan.inplan;
 
+import com.inplan.inplan.dao.User;
+import com.inplan.inplan.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -11,6 +15,9 @@ public class UserTest {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    InPlanService inPlanService;
 
     @Test
     void createUser() {
@@ -61,5 +68,31 @@ public class UserTest {
         } else {
             System.out.println("deleted");
         }
+    }
+
+    @Test
+    void putUserByInPlanService() {
+        User user = new User(0, "test", "test@test.com");
+        inPlanService.putUser(user);
+    }
+
+    @Test
+    void getUserByInPlanService() {
+        List<User> userList = inPlanService.getUserById();
+        System.out.println("userList = " + userList);
+    }
+
+    @Test
+    void updateUserByInPlanService() {
+        putUserByInPlanService();
+        inPlanService.updateUserById(1, new User(0, "updatedName", "updatedEmail@test.com"));
+        getUserByInPlanService();
+    }
+
+    @Test
+    void deleteUserByInPlanService() {
+        putUserByInPlanService();
+        inPlanService.deleteUserById(1);
+        getUserByInPlanService();
     }
 }

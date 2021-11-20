@@ -1,7 +1,6 @@
-package com.inplan.inplan;
+package com.inplan.inplan.dao;
 
-
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,10 +8,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
-public class PlanCategory {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
-    String name;
+    private int id;
+
+    private String name;
+    private String email;
 }

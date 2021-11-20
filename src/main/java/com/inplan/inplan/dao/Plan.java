@@ -1,4 +1,4 @@
-package com.inplan.inplan;
+package com.inplan.inplan.dao;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
