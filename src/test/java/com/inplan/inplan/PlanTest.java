@@ -1,6 +1,7 @@
 package com.inplan.inplan;
 
 import com.inplan.inplan.dao.Plan;
+import com.inplan.inplan.dao.PlanCategory;
 import com.inplan.inplan.dao.User;
 import com.inplan.inplan.repository.PlanRepository;
 import com.inplan.inplan.repository.UserRepository;
@@ -24,7 +25,7 @@ public class PlanTest {
         User user = new User(0, "test", "test@test.com");
         userRepository.save(user);
 
-        Plan plan = new Plan(0, user, OffsetDateTime.now(), OffsetDateTime.now(), 1, "test");
+        Plan plan = new Plan(0, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0, "운동"), "test");
         planRepository.save(plan);
     }
 
@@ -33,7 +34,7 @@ public class PlanTest {
         User user = new User(0, "test", "test@test.com");
         userRepository.save(user);
 
-        Plan plan = new Plan(0, user, OffsetDateTime.now(), OffsetDateTime.now(), 1, "test");
+        Plan plan = new Plan(0, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0, "운동"), "test");
         planRepository.save(plan);
 
         Optional<Plan> selected = planRepository.findById(1);
@@ -47,7 +48,7 @@ public class PlanTest {
         User user = new User(0, "test", "test@test.com");
         userRepository.save(user);
 
-        Plan plan = new Plan(0, user, OffsetDateTime.now(), OffsetDateTime.now(), 1, "test");
+        Plan plan = new Plan(0, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0, "운동"), "test");
         planRepository.save(plan);
 
         plan.setDescription("update test");
@@ -65,7 +66,7 @@ public class PlanTest {
         User user = new User(0, "test", "test@test.com");
         userRepository.save(user);
 
-        Plan plan = new Plan(0, user, OffsetDateTime.now(), OffsetDateTime.now(), 1, "test");
+        Plan plan = new Plan(0, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0, "운동"), "test");
         planRepository.save(plan);
 
         Optional<Plan> selected = planRepository.findById(1);

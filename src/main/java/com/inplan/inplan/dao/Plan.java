@@ -21,6 +21,8 @@ public class Plan {
     private User user;
     private OffsetDateTime startDate;
     private OffsetDateTime endDate;
-    private int categoryId;
+    @JoinColumn(name = "plan_category_id")
+    @ManyToOne
+    private PlanCategory planCategory;
     private String description;
 }
