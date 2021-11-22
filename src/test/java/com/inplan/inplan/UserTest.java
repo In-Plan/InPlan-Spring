@@ -60,7 +60,7 @@ public class UserTest {
         User user = new User(0,"test@test.com", "test");
         userRepository.save(user);
 
-        userRepository.deleteById(1);
+        userRepository.deleteById(user.getId());
 
         Optional<User> deletedUser = userRepository.findById(1);
         if (deletedUser.isPresent()) {
@@ -78,7 +78,7 @@ public class UserTest {
 
     @Test
     void getUserByInPlanService() {
-        List<User> userList = inPlanService.getUserById();
+        List<User> userList = inPlanService.getUserById(0);
         System.out.println("userList = " + userList);
     }
 

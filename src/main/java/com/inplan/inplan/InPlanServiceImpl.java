@@ -5,6 +5,7 @@ import com.inplan.inplan.repository.UserRepository;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +21,17 @@ public class InPlanServiceImpl implements InPlanService{
     }
 
     @Override
-    public List<User> getUserById() {
-        List<User> userList = userRepository.findAll();
+    public List<User> getUserById(int id) {
+        List<User> userList = new ArrayList<>();
+
+        if (id <= 0) {
+            userList.addAll(userRepository.findAll());
+        } else {
+            Optional<User> user = userRepository.findById(id);
+            if (user.isPresent()) {
+                userList.add(user.get());
+            }
+        }
         return userList;
     }
 
