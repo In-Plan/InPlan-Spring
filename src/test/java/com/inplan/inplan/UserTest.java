@@ -21,16 +21,16 @@ public class UserTest {
 
     @Test
     void createUser() {
-        User user = new User(0,"test@test.com", "test");
+        User user = new User(0L,"test@test.com", "test");
         userRepository.save(user);
     }
 
     @Test
     void selectUser() {
-        User user = new User(0,"test@test.com", "test");
+        User user = new User(0L,"test@test.com", "test");
         userRepository.save(user);
 
-        Optional<User> selectedUser = userRepository.findById(1);
+        Optional<User> selectedUser = userRepository.findById(1L);
         if (selectedUser.isPresent()) {
             System.out.println("user.get() = " + selectedUser.get());
         }
@@ -38,10 +38,10 @@ public class UserTest {
 
     @Test
     void updateUser() {
-        User user = new User(0,"test@test.com", "test");
+        User user = new User(0L,"test@test.com", "test");
         userRepository.save(user);
 
-        Optional<User> selectedUser = userRepository.findById(1);
+        Optional<User> selectedUser = userRepository.findById(1L);
         if (selectedUser.isPresent()) {
             System.out.println("user.get() = " + selectedUser.get());
         }
@@ -49,7 +49,7 @@ public class UserTest {
         user.setName("test_updated");
         userRepository.save(user);
 
-        Optional<User> updatedUser = userRepository.findById(1);
+        Optional<User> updatedUser = userRepository.findById(1L);
         if (updatedUser.isPresent()) {
             System.out.println("updatedUser.get() = " + updatedUser.get());
         }
@@ -57,12 +57,12 @@ public class UserTest {
 
     @Test
     void deleteUser() {
-        User user = new User(0,"test@test.com", "test");
+        User user = new User(0L,"test@test.com", "test");
         userRepository.save(user);
 
         userRepository.deleteById(user.getId());
 
-        Optional<User> deletedUser = userRepository.findById(1);
+        Optional<User> deletedUser = userRepository.findById(1L);
         if (deletedUser.isPresent()) {
             System.out.println("deletedUser.get() = " + deletedUser.get());
         } else {
@@ -72,27 +72,27 @@ public class UserTest {
 
     @Test
     void putUserByInPlanService() {
-        User user = new User(0, "test", "test@test.com");
+        User user = new User(0L, "test", "test@test.com");
         inPlanService.putUser(user);
     }
 
     @Test
     void getUserByInPlanService() {
-        List<User> userList = inPlanService.getUserById(0);
+        List<User> userList = inPlanService.getUserById(0L);
         System.out.println("userList = " + userList);
     }
 
     @Test
     void updateUserByInPlanService() {
         putUserByInPlanService();
-        inPlanService.updateUserById(1, new User(0, "updatedName", "updatedEmail@test.com"));
+        inPlanService.updateUserById(1L, new User(0L, "updatedName", "updatedEmail@test.com"));
         getUserByInPlanService();
     }
 
     @Test
     void deleteUserByInPlanService() {
         putUserByInPlanService();
-        inPlanService.deleteUserById(1);
+        inPlanService.deleteUserById(1L);
         getUserByInPlanService();
     }
 }

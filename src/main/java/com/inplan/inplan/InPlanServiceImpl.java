@@ -21,10 +21,10 @@ public class InPlanServiceImpl implements InPlanService{
     }
 
     @Override
-    public List<User> getUserById(int id) {
+    public List<User> getUserById(Long id) {
         List<User> userList = new ArrayList<>();
 
-        if (id <= 0) {
+        if (id == null) {
             userList.addAll(userRepository.findAll());
         } else {
             Optional<User> user = userRepository.findById(id);
@@ -36,12 +36,12 @@ public class InPlanServiceImpl implements InPlanService{
     }
 
     @Override
-    public void deleteUserById(int id) {
+    public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
 
     @Override
-    public void updateUserById(int id, User user) {
+    public void updateUserById(Long id, User user) {
         Optional<User> selectedUser = userRepository.findById(id);
         if (selectedUser.isPresent()){
             user.setId(selectedUser.get().getId());

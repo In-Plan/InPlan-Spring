@@ -19,13 +19,13 @@ public class PlanCategoryTest {
 
     @Test
     public void createPlanCategory() {
-        PlanCategory planCategory = new PlanCategory(0, "운동");
+        PlanCategory planCategory = new PlanCategory(0L, "운동");
         planCategoryRepository.save(planCategory);
     }
 
     @Test
     public void selectPlanCategory() {
-        PlanCategory planCategory = new PlanCategory(0, "운동");
+        PlanCategory planCategory = new PlanCategory(0L, "운동");
         planCategory = planCategoryRepository.save(planCategory);
 
         Optional<PlanCategory> selectPlanCategory = planCategoryRepository.findById(planCategory.getId());
@@ -37,7 +37,7 @@ public class PlanCategoryTest {
 
     @Test
     public void updatePlanCategory() {
-        PlanCategory planCategory = new PlanCategory(0, "운동");
+        PlanCategory planCategory = new PlanCategory(0L, "운동");
         planCategory = planCategoryRepository.save(planCategory);
 
         planCategory.setName("공부");
@@ -52,7 +52,7 @@ public class PlanCategoryTest {
 
     @Test
     public void deletePlanCategory() {
-        PlanCategory planCategory = new PlanCategory(0, "운동");
+        PlanCategory planCategory = new PlanCategory(0L, "운동");
         planCategory = planCategoryRepository.save(planCategory);
 
         planCategoryRepository.deleteById(planCategory.getId());

@@ -17,6 +17,6 @@ import javax.persistence.Id;
 public class PlanCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    Long id;
     String name;
 }

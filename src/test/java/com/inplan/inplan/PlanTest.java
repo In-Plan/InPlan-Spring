@@ -22,22 +22,22 @@ public class PlanTest {
 
     @Test
     void createPlan() {
-        User user = new User(0, "test", "test@test.com");
+        User user = new User(0L, "test", "test@test.com");
         userRepository.save(user);
 
-        Plan plan = new Plan(0, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0, "운동"), "test");
+        Plan plan = new Plan(0L, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0L, "운동"), "test");
         planRepository.save(plan);
     }
 
     @Test
     void selectPlan() {
-        User user = new User(0, "test", "test@test.com");
+        User user = new User(0L, "test", "test@test.com");
         userRepository.save(user);
 
-        Plan plan = new Plan(0, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0, "운동"), "test");
+        Plan plan = new Plan(0L, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0L, "운동"), "test");
         planRepository.save(plan);
 
-        Optional<Plan> selected = planRepository.findById(1);
+        Optional<Plan> selected = planRepository.findById(1L);
         if (selected.isPresent()) {
             System.out.println("selected = " + selected);
         }
@@ -45,17 +45,17 @@ public class PlanTest {
 
     @Test
     void updatePlan() {
-        User user = new User(0, "test", "test@test.com");
+        User user = new User(0L, "test", "test@test.com");
         userRepository.save(user);
 
-        Plan plan = new Plan(0, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0, "운동"), "test");
+        Plan plan = new Plan(0L, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0L, "운동"), "test");
         planRepository.save(plan);
 
         plan.setDescription("update test");
 
         planRepository.save(plan);
 
-        Optional<Plan> selected = planRepository.findById(1);
+        Optional<Plan> selected = planRepository.findById(1L);
         if (selected.isPresent()) {
             System.out.println("selected = " + selected);
         }
@@ -63,20 +63,20 @@ public class PlanTest {
 
     @Test
     void deletePlan() {
-        User user = new User(0, "test", "test@test.com");
+        User user = new User(0L, "test", "test@test.com");
         userRepository.save(user);
 
-        Plan plan = new Plan(0, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0, "운동"), "test");
+        Plan plan = new Plan(0L, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0L, "운동"), "test");
         planRepository.save(plan);
 
-        Optional<Plan> selected = planRepository.findById(1);
+        Optional<Plan> selected = planRepository.findById(1L);
         if (selected.isPresent()) {
             System.out.println("selected = " + selected);
         }
 
         planRepository.delete(plan);
 
-        selected = planRepository.findById(1);
+        selected = planRepository.findById(1L);
         if (selected.isPresent()) {
             System.out.println("selected = " + selected);
         } else {
