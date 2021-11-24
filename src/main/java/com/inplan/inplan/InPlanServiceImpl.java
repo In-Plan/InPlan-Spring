@@ -16,8 +16,8 @@ public class InPlanServiceImpl implements InPlanService{
     private final UserRepository userRepository;
 
     @Override
-    public void putUser(User user) {
-        userRepository.save(user);
+    public Long putUser(User user) {
+        return userRepository.save(user).getId();
     }
 
     @Override
@@ -36,16 +36,18 @@ public class InPlanServiceImpl implements InPlanService{
     }
 
     @Override
-    public void deleteUserById(Long id) {
+    public Long deleteUserById(Long id) {
         userRepository.deleteById(id);
+        return id;
     }
 
     @Override
-    public void updateUserById(Long id, User user) {
+    public Long updateUserById(Long id, User user) {
         Optional<User> selectedUser = userRepository.findById(id);
         if (selectedUser.isPresent()){
             user.setId(selectedUser.get().getId());
             userRepository.save(user);
         }
+        return id;
     }
 }

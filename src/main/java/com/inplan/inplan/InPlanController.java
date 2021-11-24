@@ -1,8 +1,7 @@
 package com.inplan.inplan;
 
 import com.inplan.inplan.dao.User;
-import com.inplan.inplan.dto.InPlanResponseEntity;
-import com.inplan.inplan.dto.ResponseGetUser;
+import com.inplan.inplan.dto.*;
 import lombok.Data;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +13,8 @@ public class InPlanController {
     private final InPlanService inPlanService;
 
     @PutMapping("/user")
-    public InPlanResponseEntity putUser(@RequestBody User user) {
-        inPlanService.putUser(user);
-        return new InPlanResponseEntity("user created");
+    public ResponsePutUser putUser(@RequestBody User user) {
+        return new ResponsePutUser(inPlanService.putUser(user), "user created");
     }
 
     @GetMapping("/user")
@@ -25,14 +23,12 @@ public class InPlanController {
     }
 
     @PatchMapping("/user")
-    public InPlanResponseEntity patchUser(@RequestParam(required = false) Long id, @RequestBody User user) {
-        inPlanService.updateUserById(id, user);
-        return new InPlanResponseEntity("user updated");
+    public ResponsePatchUser patchUser(@RequestParam(required = false) Long id, @RequestBody User user) {
+        return new ResponsePatchUser(inPlanService.updateUserById(id, user), "user updated");
     }
 
     @DeleteMapping("/user")
-    public InPlanResponseEntity deleteUser(@RequestParam(required = false) Long id) {
-        inPlanService.deleteUserById(id);
-        return new InPlanResponseEntity("user deleted");
+    public ResponseDeleteUser deleteUser(@RequestParam(required = false) Long id) {
+        return new ResponseDeleteUser(inPlanService.deleteUserById(id), "user deleted");
     }
 }
