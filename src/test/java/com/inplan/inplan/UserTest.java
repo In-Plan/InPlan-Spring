@@ -5,8 +5,10 @@ import com.inplan.inplan.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,15 +21,27 @@ public class UserTest {
     @Autowired
     InPlanService inPlanService;
 
+    public User getUser() {
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        User user = User.builder()
+                .uid("user")
+                .password(passwordEncoder.encode("pass"))
+                .name("test")
+                .email("test@gmail.com")
+                .roles(Collections.singletonList("ROLE_USER"))
+                .build();
+        return user;
+    }
+
     @Test
     void createUser() {
-        User user = new User(0L,"test@test.com", "test");
+        User user = getUser();
         userRepository.save(user);
     }
 
     @Test
     void selectUser() {
-        User user = new User(0L,"test@test.com", "test");
+        User user = getUser();
         userRepository.save(user);
 
         Optional<User> selectedUser = userRepository.findById(1L);
@@ -38,7 +52,7 @@ public class UserTest {
 
     @Test
     void updateUser() {
-        User user = new User(0L,"test@test.com", "test");
+        User user = getUser();
         userRepository.save(user);
 
         Optional<User> selectedUser = userRepository.findById(1L);
@@ -57,10 +71,10 @@ public class UserTest {
 
     @Test
     void deleteUser() {
-        User user = new User(0L,"test@test.com", "test");
+        User user = getUser();
         userRepository.save(user);
 
-        userRepository.deleteById(user.getId());
+        userRepository.deleteById(user.getMsrl());
 
         Optional<User> deletedUser = userRepository.findById(1L);
         if (deletedUser.isPresent()) {
@@ -72,7 +86,7 @@ public class UserTest {
 
     @Test
     void putUserByInPlanService() {
-        User user = new User(0L, "test", "test@test.com");
+        User user = getUser();
         inPlanService.putUser(user);
     }
 
@@ -85,7 +99,7 @@ public class UserTest {
     @Test
     void updateUserByInPlanService() {
         putUserByInPlanService();
-        inPlanService.updateUserById(1L, new User(0L, "updatedName", "updatedEmail@test.com"));
+        inPlanService.updateUserById(1L, getUser());
         getUserByInPlanService();
     }
 
