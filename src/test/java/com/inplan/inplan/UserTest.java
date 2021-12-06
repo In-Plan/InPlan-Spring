@@ -2,15 +2,21 @@ package com.inplan.inplan;
 
 import com.inplan.inplan.dao.User;
 import com.inplan.inplan.repository.UserRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.Assert;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 public class UserTest {
@@ -24,7 +30,7 @@ public class UserTest {
     public User getUser() {
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         User user = User.builder()
-                .uid("user")
+                .uid("user" + LocalDateTime.now())
                 .password(passwordEncoder.encode("pass"))
                 .name("test")
                 .email("test@gmail.com")
@@ -34,79 +40,41 @@ public class UserTest {
     }
 
     @Test
-    void createUser() {
-        User user = getUser();
-        userRepository.save(user);
-    }
-
-    @Test
-    void selectUser() {
+    public void createUserTest() {
         User user = getUser();
         userRepository.save(user);
 
-        Optional<User> selectedUser = userRepository.findById(1L);
-        if (selectedUser.isPresent()) {
-            System.out.println("user.get() = " + selectedUser.get());
-        }
+        assertThat(user.getMsrl()).isEqualTo(userRepository.findByUid(user.getUid()).get().getMsrl());
     }
 
     @Test
-    void updateUser() {
+    public void updateUserTest() {
         User user = getUser();
         userRepository.save(user);
 
-        Optional<User> selectedUser = userRepository.findById(1L);
-        if (selectedUser.isPresent()) {
-            System.out.println("user.get() = " + selectedUser.get());
-        }
+        assertThat(user.getMsrl()).isEqualTo(userRepository.findByUid(user.getUid()).get().getMsrl());
 
-        user.setName("test_updated");
+        String updateName = "test2";
+        String updateEmail = "test2@test.com";
+
+        user.setName(updateName);
+        user.setEmail(updateEmail);
+
         userRepository.save(user);
 
-        Optional<User> updatedUser = userRepository.findById(1L);
-        if (updatedUser.isPresent()) {
-            System.out.println("updatedUser.get() = " + updatedUser.get());
-        }
+        assertThat(userRepository.findByUid(user.getUid()).get().getName()).isEqualTo(updateName);
+        assertThat(userRepository.findByUid(user.getUid()).get().getEmail()).isEqualTo(updateEmail);
     }
 
     @Test
-    void deleteUser() {
+    public void deleteUserTest() {
         User user = getUser();
         userRepository.save(user);
 
-        userRepository.deleteById(user.getMsrl());
+        assertThat(user.getMsrl()).isEqualTo(userRepository.findByUid(user.getUid()).get().getMsrl());
 
-        Optional<User> deletedUser = userRepository.findById(1L);
-        if (deletedUser.isPresent()) {
-            System.out.println("deletedUser.get() = " + deletedUser.get());
-        } else {
-            System.out.println("deleted");
-        }
-    }
+        int count = userRepository.deleteByUid(user.getUid());
 
-    @Test
-    void putUserByInPlanService() {
-        User user = getUser();
-        inPlanService.putUser(user);
-    }
-
-    @Test
-    void getUserByInPlanService() {
-        List<User> userList = inPlanService.getUserById(0L);
-        System.out.println("userList = " + userList);
-    }
-
-    @Test
-    void updateUserByInPlanService() {
-        putUserByInPlanService();
-        inPlanService.updateUserById(1L, getUser());
-        getUserByInPlanService();
-    }
-
-    @Test
-    void deleteUserByInPlanService() {
-        putUserByInPlanService();
-        inPlanService.deleteUserById(1L);
-        getUserByInPlanService();
+        assertThat(count).isEqualTo(1);
     }
 }
