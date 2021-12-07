@@ -2,23 +2,23 @@ package com.inplan.inplan;
 
 import com.inplan.inplan.dao.User;
 import com.inplan.inplan.repository.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.util.Assert;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 public class UserTest {
 
     @Autowired
@@ -27,10 +27,13 @@ public class UserTest {
     @Autowired
     InPlanService inPlanService;
 
+    @Autowired
+    MockMvc mockMvc;
+
     public User getUser() {
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         User user = User.builder()
-                .uid("user" + LocalDateTime.now())
+                .uid("user")
                 .password(passwordEncoder.encode("pass"))
                 .name("test")
                 .email("test@gmail.com")
@@ -76,5 +79,14 @@ public class UserTest {
         int count = userRepository.deleteByUid(user.getUid());
 
         assertThat(count).isEqualTo(1);
+    }
+
+    @Test
+    public void login() throws Exception {
+        User user = getUser();
+        userRepository.save(user);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("http://user:pass@localhost:9000/oauth/authorize?response_type=code&client_id=foo&redirect_uri=http://localhost:8080/login/oauth2/code/local&scope=read"))
+                .andDo(MockMvcResultHandlers.print());
     }
 }

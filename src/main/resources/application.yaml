@@ -2,7 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/inplan?serverTimezone=Asia/Seoul
-    username: root
+    username: ysy
+    password: Qwpo1209
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -12,3 +13,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+server:
+  port: 9000
