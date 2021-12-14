@@ -36,18 +36,18 @@ public class InPlanServiceImpl implements InPlanService{
     }
 
     @Override
-    public Long deleteUserById(Long id) {
-        userRepository.deleteById(id);
-        return id;
+    public String deleteUserById(String uid) {
+        userRepository.deleteByUid(uid);
+        return uid;
     }
 
     @Override
-    public Long updateUserById(Long id, User user) {
-        Optional<User> selectedUser = userRepository.findById(id);
+    public String updateUserByUid(String uid, User user) {
+        Optional<User> selectedUser = userRepository.findByUid(uid);
         if (selectedUser.isPresent()){
             user.setMsrl(selectedUser.get().getMsrl());
             userRepository.save(user);
         }
-        return id;
+        return uid;
     }
 }

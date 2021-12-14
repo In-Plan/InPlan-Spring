@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseDeleteUser {
-    private Long id;
+    private String uid;
     private String msg;
 }

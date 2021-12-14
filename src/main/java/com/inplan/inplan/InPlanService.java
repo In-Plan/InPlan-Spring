@@ -7,8 +7,11 @@ import java.util.List;
 
 public interface InPlanService {
     Long putUser(User user);
+
     List<User> getUserById(Long id);
-    Long deleteUserById(Long id);
-    Long updateUserById(Long id, User user);
+
+    String deleteUserById(String uid);
+
+    String updateUserByUid(String uid, User user);
 
 }

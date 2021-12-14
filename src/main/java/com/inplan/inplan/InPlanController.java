@@ -6,7 +6,8 @@ import lombok.Data;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("v1")
+@RestController
+@RequestMapping("/v1")
 @Data
 public class InPlanController {
 
@@ -19,16 +20,16 @@ public class InPlanController {
 
     @GetMapping("/user")
     public ResponseGetUser getUser(@RequestParam(required = false) Long id) {
-        return new ResponseGetUser(inPlanService.getUserById(id));
+        return ResponseGetUser.builder().users(inPlanService.getUserById(id)).build();
     }
 
     @PatchMapping("/user")
-    public ResponsePatchUser patchUser(@RequestParam(required = false) Long id, @RequestBody User user) {
-        return new ResponsePatchUser(inPlanService.updateUserById(id, user), "user updated");
+    public ResponsePatchUser patchUser(@RequestParam(required = false) String uid, @RequestBody User user) {
+        return new ResponsePatchUser(inPlanService.updateUserByUid(uid, user), "user updated");
     }
 
     @DeleteMapping("/user")
-    public ResponseDeleteUser deleteUser(@RequestParam(required = false) Long id) {
-        return new ResponseDeleteUser(inPlanService.deleteUserById(id), "user deleted");
+    public ResponseDeleteUser deleteUser(@RequestParam(required = false) String uid) {
+        return new ResponseDeleteUser(inPlanService.deleteUserById(uid), "user deleted");
     }
 }
