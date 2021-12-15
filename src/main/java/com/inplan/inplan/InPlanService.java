@@ -1,5 +1,6 @@
 package com.inplan.inplan;
 
+import com.inplan.inplan.dao.Plan;
 import com.inplan.inplan.dao.User;
 import org.springframework.http.ResponseEntity;
 
@@ -14,4 +15,5 @@ public interface InPlanService {
 
     String updateUserByUid(String uid, User user);
 
+    List<Plan> getPlanById(Long id);
 }

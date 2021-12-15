@@ -1,6 +1,8 @@
 package com.inplan.inplan;
 
+import com.inplan.inplan.dao.Plan;
 import com.inplan.inplan.dao.User;
+import com.inplan.inplan.repository.PlanRepository;
 import com.inplan.inplan.repository.UserRepository;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -12,8 +14,9 @@ import java.util.Optional;
 
 @Data
 @Service
-public class InPlanServiceImpl implements InPlanService{
+public class InPlanServiceImpl implements InPlanService {
     private final UserRepository userRepository;
+    private final PlanRepository planRepository;
 
     @Override
     public Long putUser(User user) {
@@ -44,10 +47,25 @@ public class InPlanServiceImpl implements InPlanService{
     @Override
     public String updateUserByUid(String uid, User user) {
         Optional<User> selectedUser = userRepository.findByUid(uid);
-        if (selectedUser.isPresent()){
+        if (selectedUser.isPresent()) {
             user.setMsrl(selectedUser.get().getMsrl());
             userRepository.save(user);
         }
         return uid;
+    }
+
+    @Override
+    public List<Plan> getPlanById(Long id) {
+        List<Plan> planList = new ArrayList<>();
+
+        if (id == null) {
+            planList.addAll(planRepository.findAll());
+        } else {
+            Optional<Plan> plan = planRepository.findById(id);
+            if (plan.isPresent()) {
+                planList.add(plan.get());
+            }
+        }
+        return planList;
     }
 }

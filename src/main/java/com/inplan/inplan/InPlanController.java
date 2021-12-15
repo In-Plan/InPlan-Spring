@@ -32,4 +32,9 @@ public class InPlanController {
     public ResponseDeleteUser deleteUser(@RequestParam(required = false) String uid) {
         return new ResponseDeleteUser(inPlanService.deleteUserById(uid), "user deleted");
     }
+
+    @GetMapping("/plan")
+    public ResponseGetPlan getPlan(@RequestParam(required = false) Long id) {
+        return ResponseGetPlan.builder().plans(inPlanService.getPlanById(id)).build();
+    }
 }

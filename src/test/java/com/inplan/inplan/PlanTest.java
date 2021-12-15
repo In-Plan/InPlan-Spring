@@ -1,5 +1,6 @@
 package com.inplan.inplan;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.inplan.inplan.dao.Plan;
 import com.inplan.inplan.dao.PlanCategory;
 import com.inplan.inplan.dao.User;
@@ -7,22 +8,38 @@ import com.inplan.inplan.repository.PlanRepository;
 import com.inplan.inplan.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 @SpringBootTest
+@AutoConfigureMockMvc
 public class PlanTest {
     @Autowired
     UserRepository userRepository;
 
     @Autowired
     PlanRepository planRepository;
+
+    @Autowired
+    MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     public User getUser() {
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -97,5 +114,12 @@ public class PlanTest {
         } else {
             System.out.println("deleted");
         }
+    }
+
+    @Test
+    void selectPlanByAPI() throws Exception {
+        mockMvc.perform(get("/v1/plan"))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 }
