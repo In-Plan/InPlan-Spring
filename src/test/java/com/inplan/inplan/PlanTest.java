@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
@@ -53,12 +54,15 @@ public class PlanTest {
         return user;
     }
 
-    @Test
-    void createPlan() {
+    public Plan getPlan() {
         User user = getUser();
         userRepository.save(user);
-        Plan plan = new Plan(0L, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0L, "운동"), "test");
-        planRepository.save(plan);
+        return new Plan(null, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(null, "운동"), "test");
+    }
+
+    @Test
+    void createPlan() {
+        planRepository.save(getPlan());
     }
 
     @Test
@@ -121,5 +125,22 @@ public class PlanTest {
         mockMvc.perform(get("/v1/plan"))
                 .andExpect(status().isOk())
                 .andDo(print());
+    }
+
+    @Test
+    void createPlanByAPI() throws Exception {
+        Plan plan = getPlan();
+
+        String content = objectMapper.writeValueAsString(plan);
+        System.out.println("content = " + content);
+
+        mockMvc.perform(put("/v1/plan")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        selectPlanByAPI();
     }
 }

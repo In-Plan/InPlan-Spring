@@ -1,5 +1,6 @@
 package com.inplan.inplan;
 
+import com.inplan.inplan.dao.Plan;
 import com.inplan.inplan.dao.User;
 import com.inplan.inplan.dto.*;
 import lombok.Data;
@@ -36,5 +37,10 @@ public class InPlanController {
     @GetMapping("/plan")
     public ResponseGetPlan getPlan(@RequestParam(required = false) Long id) {
         return ResponseGetPlan.builder().plans(inPlanService.getPlanById(id)).build();
+    }
+
+    @PutMapping("/plan")
+    public ResponsePutPlan putPlan(@RequestBody Plan plan) {
+        return new ResponsePutPlan(inPlanService.putPlan(plan), "plan created");
     }
 }

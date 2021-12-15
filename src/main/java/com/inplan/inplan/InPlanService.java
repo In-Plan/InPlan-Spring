@@ -16,4 +16,6 @@ public interface InPlanService {
     String updateUserByUid(String uid, User user);
 
     List<Plan> getPlanById(Long id);
+
+    Long putPlan(Plan plan);
 }

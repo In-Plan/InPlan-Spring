@@ -22,7 +22,7 @@ public class Plan {
     private OffsetDateTime startDate;
     private OffsetDateTime endDate;
     @JoinColumn(name = "plan_category_id")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private PlanCategory planCategory;
     private String description;
 }

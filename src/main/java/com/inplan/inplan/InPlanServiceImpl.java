@@ -68,4 +68,9 @@ public class InPlanServiceImpl implements InPlanService {
         }
         return planList;
     }
+
+    @Override
+    public Long putPlan(Plan plan) {
+        return planRepository.save(plan).getId();
+    }
 }
