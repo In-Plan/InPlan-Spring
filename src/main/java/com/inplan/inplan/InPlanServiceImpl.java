@@ -73,4 +73,16 @@ public class InPlanServiceImpl implements InPlanService {
     public Long putPlan(Plan plan) {
         return planRepository.save(plan).getId();
     }
+
+    @Override
+    public Long updatePlanById(Long id, Plan plan) {
+        Optional<Plan> selectPlan = planRepository.findById(id);
+
+        if (selectPlan.isPresent()) {
+            plan.setId(selectPlan.get().getId());
+            return planRepository.save(plan).getId();
+        } else {
+            return null;
+        }
+    }
 }

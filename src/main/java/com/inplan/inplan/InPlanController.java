@@ -43,4 +43,9 @@ public class InPlanController {
     public ResponsePutPlan putPlan(@RequestBody Plan plan) {
         return new ResponsePutPlan(inPlanService.putPlan(plan), "plan created");
     }
+
+    @PatchMapping("/plan")
+    public ResponsePatchPlan patchPlan(@RequestParam Long id, @RequestBody Plan plan) {
+        return new ResponsePatchPlan(inPlanService.updatePlanById(id, plan), "plan updated");
+    }
 }

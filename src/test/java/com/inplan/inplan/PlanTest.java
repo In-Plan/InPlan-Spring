@@ -143,4 +143,22 @@ public class PlanTest {
 
         selectPlanByAPI();
     }
+
+    @Test
+    void updatePlanByAPI() throws Exception {
+        Plan plan = getPlan();
+        Plan savedPlan = planRepository.save(plan);
+
+        savedPlan.setDescription("update test");
+        String content = objectMapper.writeValueAsString(savedPlan);
+
+        mockMvc.perform(patch("/v1/plan")
+                .param("id", savedPlan.getId().toString())
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        selectPlanByAPI();
+    }
 }

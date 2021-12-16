@@ -18,4 +18,6 @@ public interface InPlanService {
     List<Plan> getPlanById(Long id);
 
     Long putPlan(Plan plan);
+
+    Long updatePlanById(Long id, Plan plan);
 }
