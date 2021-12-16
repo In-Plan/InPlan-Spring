@@ -20,4 +20,6 @@ public interface InPlanService {
     Long putPlan(Plan plan);
 
     Long updatePlanById(Long id, Plan plan);
+
+    Long deletePlanById(Long id);
 }

@@ -10,22 +10,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -153,9 +149,22 @@ public class PlanTest {
         String content = objectMapper.writeValueAsString(savedPlan);
 
         mockMvc.perform(patch("/v1/plan")
-                .param("id", savedPlan.getId().toString())
-                .content(content)
-                .contentType(MediaType.APPLICATION_JSON))
+                        .param("id", savedPlan.getId().toString())
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        selectPlanByAPI();
+    }
+
+    @Test
+    void deletePlanByAPI() throws Exception {
+        Plan plan = getPlan();
+        Plan savedPlan = planRepository.save(plan);
+
+        mockMvc.perform(delete("/v1/plan")
+                        .param("id", savedPlan.getId().toString()))
                 .andExpect(status().isOk())
                 .andDo(print());
 

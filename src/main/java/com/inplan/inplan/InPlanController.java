@@ -4,7 +4,6 @@ import com.inplan.inplan.dao.Plan;
 import com.inplan.inplan.dao.User;
 import com.inplan.inplan.dto.*;
 import lombok.Data;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -47,5 +46,10 @@ public class InPlanController {
     @PatchMapping("/plan")
     public ResponsePatchPlan patchPlan(@RequestParam Long id, @RequestBody Plan plan) {
         return new ResponsePatchPlan(inPlanService.updatePlanById(id, plan), "plan updated");
+    }
+
+    @DeleteMapping("/plan")
+    public ResponseDeletePlan deletePlan(@RequestParam Long id) {
+        return new ResponseDeletePlan(inPlanService.deletePlanById(id), "plan deleted");
     }
 }

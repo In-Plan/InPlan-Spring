@@ -85,4 +85,10 @@ public class InPlanServiceImpl implements InPlanService {
             return null;
         }
     }
+
+    @Override
+    public Long deletePlanById(Long id) {
+        planRepository.deleteById(id);
+        return id;
+    }
 }
