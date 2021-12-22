@@ -6,6 +6,7 @@ import com.inplan.inplan.dao.PlanCategory;
 import com.inplan.inplan.dao.User;
 import com.inplan.inplan.repository.PlanRepository;
 import com.inplan.inplan.repository.UserRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,10 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.OffsetDateTime;
 import java.util.Collections;
-import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -41,7 +43,7 @@ public class PlanTest {
     public User getUser() {
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         User user = User.builder()
-                .uid("user")
+                .uid("user" + System.currentTimeMillis())
                 .password(passwordEncoder.encode("pass"))
                 .name("test")
                 .email("test@gmail.com")
@@ -57,73 +59,55 @@ public class PlanTest {
     }
 
     @Test
-    void createPlan() {
-        planRepository.save(getPlan());
+    @DisplayName("PlanRepository를 통해 Plan 생성")
+    void createPlanTest() {
+        Plan plan = getPlan();
+        plan = planRepository.save(plan);
+
+        assertThat(plan.getId()).isEqualTo(planRepository.findById(plan.getId()).get().getId());
     }
 
     @Test
-    void selectPlan() {
-        User user = getUser();
-        userRepository.save(user);
-
-        Plan plan = new Plan(0L, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0L, "운동"), "test");
-        planRepository.save(plan);
-
-        Optional<Plan> selected = planRepository.findById(1L);
-        if (selected.isPresent()) {
-            System.out.println("selected = " + selected);
-        }
-    }
-
-    @Test
+    @DisplayName("PlanRepository를 통해 Plan 업데이트")
     void updatePlan() {
-        User user = getUser();
-        userRepository.save(user);
+        Plan plan = getPlan();
+        plan = planRepository.save(plan);
 
-        Plan plan = new Plan(0L, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0L, "운동"), "test");
+        assertThat(plan.getId()).isEqualTo(planRepository.findById(plan.getId()).get().getId());
+
+        String updateDescription = "update test";
+
+        plan.setDescription(updateDescription);
+
         planRepository.save(plan);
 
-        plan.setDescription("update test");
-
-        planRepository.save(plan);
-
-        Optional<Plan> selected = planRepository.findById(1L);
-        if (selected.isPresent()) {
-            System.out.println("selected = " + selected);
-        }
+        assertThat(planRepository.findById(plan.getId()).get().getDescription()).isEqualTo(updateDescription);
     }
 
     @Test
+    @DisplayName("PlanRepository를 통해 Plan 삭제")
     void deletePlan() {
-        User user = getUser();
-        userRepository.save(user);
+        Plan plan = getPlan();
+        plan = planRepository.save(plan);
 
-        Plan plan = new Plan(0L, user, OffsetDateTime.now(), OffsetDateTime.now(), new PlanCategory(0L, "운동"), "test");
-        planRepository.save(plan);
+        assertThat(plan.getId()).isEqualTo(planRepository.findById(plan.getId()).get().getId());
 
-        Optional<Plan> selected = planRepository.findById(1L);
-        if (selected.isPresent()) {
-            System.out.println("selected = " + selected);
-        }
+        planRepository.deleteById(plan.getId());
 
-        planRepository.delete(plan);
-
-        selected = planRepository.findById(1L);
-        if (selected.isPresent()) {
-            System.out.println("selected = " + selected);
-        } else {
-            System.out.println("deleted");
-        }
+        assertThat(planRepository.findById(plan.getId()).isPresent()).isFalse();
     }
 
     @Test
+    @DisplayName("[GET /v1/plan] API를 통해 Plan 조회")
     void selectPlanByAPI() throws Exception {
         mockMvc.perform(get("/v1/plan"))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.plans").isArray())
                 .andDo(print());
     }
 
     @Test
+    @DisplayName("[PUT /v1/plan] API를 통해 Plan 생성")
     void createPlanByAPI() throws Exception {
         Plan plan = getPlan();
 
@@ -135,39 +119,46 @@ public class PlanTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.msg", "plan created").exists())
                 .andDo(print());
-
-        selectPlanByAPI();
     }
 
     @Test
+    @DisplayName("[PATCH /v1/plan] API를 통해 Plan 수정")
     void updatePlanByAPI() throws Exception {
         Plan plan = getPlan();
-        Plan savedPlan = planRepository.save(plan);
+        plan = planRepository.save(plan);
 
-        savedPlan.setDescription("update test");
-        String content = objectMapper.writeValueAsString(savedPlan);
+        assertThat(plan.getId()).isEqualTo(planRepository.findById(plan.getId()).get().getId());
+
+        String updateDescription = "update test";
+
+        plan.setDescription(updateDescription);
+        String content = objectMapper.writeValueAsString(plan);
 
         mockMvc.perform(patch("/v1/plan")
-                        .param("id", savedPlan.getId().toString())
+                        .param("id", plan.getId().toString())
                         .content(content)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.msg", "plan updated").exists())
                 .andDo(print());
 
-        selectPlanByAPI();
+        assertThat(planRepository.findById(plan.getId()).get().getDescription()).isEqualTo(updateDescription);
     }
 
     @Test
+    @DisplayName("[DELETE /v1/plan] API를 통해 Plan 삭제")
     void deletePlanByAPI() throws Exception {
         Plan plan = getPlan();
-        Plan savedPlan = planRepository.save(plan);
+        plan = planRepository.save(plan);
+
+        assertThat(plan.getId()).isEqualTo(planRepository.findById(plan.getId()).get().getId());
 
         mockMvc.perform(delete("/v1/plan")
-                        .param("id", savedPlan.getId().toString()))
+                        .param("id", plan.getId().toString()))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.msg", "plan deleted").exists())
                 .andDo(print());
-
-        selectPlanByAPI();
     }
 }
